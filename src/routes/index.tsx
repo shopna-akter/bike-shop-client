@@ -8,6 +8,7 @@ import Register from "../pages/auth/Register";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import Home from "../pages/home/Home";
 import AboutUs from "../pages/about/AboutUs";
+import AllProducts from "../pages/allProduct/AllProduct";
 
 const AppRoutes = () => {
   return (
@@ -20,6 +21,9 @@ const AppRoutes = () => {
         {/* Authentication Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        {/* All Product Route */}
+        <Route path="/all-product" element={<AllProducts/>}/>
 
         {/* Protected Dashboard Routes */}
         <Route

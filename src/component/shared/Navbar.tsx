@@ -25,12 +25,15 @@ const Navbar = () => {
                     <h2 style={{ color: "white", margin: 0 }}>BikeShop</h2>
                 </Link>
             </div>
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[]}>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["home"]}>
                 <Menu.Item key="home">
                     <Link to="/">Home</Link>
                 </Menu.Item>
                 <Menu.Item key="dashboard">
                     <Link to="/dashboard">Dashboard</Link>
+                </Menu.Item>
+                <Menu.Item key="all-product">
+                    <Link to="/all-product">All Product</Link>
                 </Menu.Item>
                 <Menu.Item key="about">
                     <Link to="/about">About</Link>
