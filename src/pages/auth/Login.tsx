@@ -1,8 +1,10 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Card, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/features/auth/authSlice";
 import type { AppDispatch, RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
+
+const { Title, Text } = Typography;
 
 const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,17 +24,22 @@ const Login = () => {
   };
 
   return (
-    <Form onFinish={onFinish} layout="vertical">
-      <Form.Item name="email" label="Email" rules={[{ required: true, type: "email", message: "Please enter your email!" }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="password" label="Password" rules={[{ required: true, message: "Please enter your password!" }]}>
-        <Input.Password />
-      </Form.Item>
-      <Button type="primary" htmlType="submit" loading={isLoading}>
-        Login
-      </Button>
-    </Form>
+    <Card title={<Title level={3}>Login</Title>} style={{ maxWidth: 400, margin: "auto", marginTop: 50 }}>
+      <Form onFinish={onFinish} layout="vertical">
+        <Form.Item name="email" label="Email" rules={[{ required: true, type: "email", message: "Please enter a valid email!" }]}>
+          <Input placeholder="Enter your email" />
+        </Form.Item>
+        <Form.Item name="password" label="Password" rules={[{ required: true, message: "Please enter your password!" }]}>
+          <Input.Password placeholder="Enter your password" />
+        </Form.Item>
+        <Text type="secondary" style={{ display: "block", marginBottom: 16 }}>
+          <a href="/forgot-password">Forgot Password?</a>
+        </Text>
+        <Button type="primary" htmlType="submit" loading={isLoading} block>
+          Login
+        </Button>
+      </Form>
+    </Card>
   );
 };
 

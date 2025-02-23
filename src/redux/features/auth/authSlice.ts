@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { registerUser, loginUser } from "../../../services/authService";
 
@@ -15,10 +17,13 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: null,
+  user: localStorage.getItem("token")
+    ? JSON.parse(localStorage.getItem("token") as string)
+    : null,
   isLoading: false,
   error: null,
 };
+
 
 interface RegisterUserData {
   name: string;
@@ -31,38 +36,39 @@ interface LoginUserData {
   password: string;
 }
 
+// Register user
 export const register = createAsyncThunk<User, RegisterUserData>(
   "auth/register",
   async (userData, thunkAPI) => {
     try {
       return await registerUser(userData);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Registration failed");
     }
   }
 );
 
+// Login user
 export const login = createAsyncThunk<User, LoginUserData>(
   "auth/login",
   async (userData, thunkAPI) => {
     try {
       return await loginUser(userData);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Login failed");
     }
   }
 );
 
+export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
+  localStorage.removeItem("token"); 
+  return null;
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    logout: (state) => {
-      state.user = null;
-    },
-  },
+  reducers: {}, 
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
@@ -80,15 +86,19 @@ const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(login.fulfilled, (state, action: PayloadAction<User>) => {
+        console.log("User Logged In:", action.payload);
         state.isLoading = false;
         state.user = action.payload;
-      })
+        localStorage.setItem("token", JSON.stringify(action.payload));
+      })      
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null; // ✅ Reset user state on logout
       });
   },
 });
 
-export const { logout } = authSlice.actions;
 export default authSlice.reducer;

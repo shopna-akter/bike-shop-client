@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardPage from "../pages/dashboard/Dashboard";
 import OrdersPage from "../pages/dashboard/Order";
@@ -6,13 +6,16 @@ import ProductsPage from "../pages/dashboard/Product";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ProtectedRoute from "../utils/ProtectedRoute";
+import Home from "../pages/home/Home";
+import AboutUs from "../pages/about/AboutUs";
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Redirect / to /dashboard */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* Home page routes*/}
+        <Route path="/" element={<Home/>} />
+        <Route path="/about" element={<AboutUs />} />
 
         {/* Authentication Routes */}
         <Route path="/login" element={<Login />} />
