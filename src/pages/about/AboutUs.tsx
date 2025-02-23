@@ -33,7 +33,7 @@ const AboutUs = () => {
                             <li className="text-lg mb-2">Reached over 500,000 satisfied customers in 20XX.</li>
                             <li className="text-lg mb-2">Partnered with leading cycling brands to bring premium products to our customers.</li>
                         </ul>
-                        <img src="https://img.freepik.com/free-vector/cycling-concept-illustration_114360-3085.jpg?w=740" alt="About Us Image" className="rounded-lg" />
+                        <img src="" alt="About Us Image" className="rounded-lg" />
                     </div>
                 </div>
             </div>
