@@ -8,7 +8,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "../../redux/features/product/productSlice";
-import { Button, Table, Modal, Input, Form, message } from "antd";
+import { Button, Table, Modal, Input, Form, message, Select } from "antd";
 
 interface Product {
   _id: string;
@@ -32,28 +32,23 @@ const ProductsPage = () => {
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
-
-  // Open modal for adding a new product
+  console.log("Redux State Products:", products); 
   const handleAdd = () => {
     setEditingProduct(null);
     form.resetFields();
     setIsModalOpen(true);
   };
 
-  // Open modal for editing an existing product
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
     form.setFieldsValue(product);
     setIsModalOpen(true);
   };
 
-  // Handle deleting a product
   const handleDelete = async (productId: string) => {
     await dispatch(deleteProduct(productId));
     message.success("Product deleted successfully");
   };
-
-  // Submit form for adding or updating a product
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
@@ -115,17 +110,34 @@ const ProductsPage = () => {
           <Form.Item name="brand" label="Brand" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
+          <Form.Item name="description" label="Description" rules={[{ required: true }]}>
+            <Input.TextArea />
+          </Form.Item>
+          <Form.Item name="inStock" label="In Stock" rules={[{ required: true }]}>
+            <Select>
+              <Select.Option value={true}>Yes</Select.Option>
+              <Select.Option value={false}>No</Select.Option>
+            </Select>
+          </Form.Item>
           <Form.Item name="price" label="Price" rules={[{ required: true }]}>
             <Input type="number" />
           </Form.Item>
           <Form.Item name="category" label="Category" rules={[{ required: true }]}>
-            <Input />
+            <Select>
+              <Select.Option value="Mountain">Mountain</Select.Option>
+              <Select.Option value="Road">Road</Select.Option>
+              <Select.Option value="Hybrid">Hybrid</Select.Option>
+              <Select.Option value="Electric">Electric</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item name="bikeModel" label="Bike Model" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
           <Form.Item name="quantity" label="Stock" rules={[{ required: true }]}>
             <Input type="number" />
+          </Form.Item>
+          <Form.Item name="image" label="Image URL" rules={[{ required: true }]}>
+            <Input />
           </Form.Item>
         </Form>
       </Modal>

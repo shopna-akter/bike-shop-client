@@ -36,7 +36,9 @@ export const fetchProducts = createAsyncThunk<Product[], void, { rejectValue: st
     try {
       const response = await fetch("http://localhost:5000/api/products");
       if (!response.ok) throw new Error("Failed to fetch products");
-      return await response.json();
+      const data = await response.json();
+      console.log("Fetched Products:", data);
+      return data;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -66,11 +68,14 @@ export const updateProduct = createAsyncThunk<Product, Product, { rejectValue: s
   "products/updateProduct",
   async (updatedProduct, { rejectWithValue }) => {
     try {
+      
       const response = await fetch(`http://localhost:5000/api/products/${updatedProduct._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedProduct),
       });
+      console.log("Updated Data:", updatedProduct);
+      console.log("Updating product with ID:", updatedProduct._id);
       if (!response.ok) throw new Error("Failed to update product");
       return await response.json();
     } catch (error: any) {
@@ -106,10 +111,10 @@ const productsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
-        state.products = action.payload.filter((product) => !product.isDeleted); // Exclude deleted products
+      .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<{ data: Product[] }>) => {
+        state.products = action.payload.data.filter((product) => !product.isDeleted);
         state.loading = false;
-      })
+      })      
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Something went wrong";
