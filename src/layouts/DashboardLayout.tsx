@@ -1,26 +1,22 @@
-import { Layout, Menu, Spin } from "antd";
+import { Layout, Menu } from "antd";
 import { Link, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   DashboardOutlined,
   ShoppingCartOutlined,
   AppstoreOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 
 const { Header, Sider, Content } = Layout;
 
 const DashboardLayout = () => {
-  const { user, loading } = useSelector((state: RootState) => state.auth);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Spin size="large" />
-      </div>
-    );
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useSelector((state: any) => state.auth.user);
+  const isAdmin = user?.role === "admin";
+  const userName = user?.name;
+  console.log("user", user);
+  console.log("admin", isAdmin);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -32,12 +28,12 @@ const DashboardLayout = () => {
           <Menu.Item key="1" icon={<DashboardOutlined />}>
             <Link to="/dashboard">Dashboard</Link>
           </Menu.Item>
-          <Menu.Item key="2" icon={<ShoppingCartOutlined />}>
-            <Link to="/dashboard/orders">Orders</Link>
-          </Menu.Item>
-          {/* Admin-Only Items */}
-          {user?.role === "admin" && (
+
+          {isAdmin ? (
             <>
+              <Menu.Item key="2" icon={<ShoppingCartOutlined />}>
+                <Link to="/dashboard/orders">Manage Orders</Link>
+              </Menu.Item>
               <Menu.Item key="3" icon={<AppstoreOutlined />}>
                 <Link to="/dashboard/products">Manage Products</Link>
               </Menu.Item>
@@ -45,15 +41,19 @@ const DashboardLayout = () => {
                 <Link to="/dashboard/users">Manage Users</Link>
               </Menu.Item>
             </>
+          ) : (
+            <Menu.Item key="5" icon={<ShoppingCartOutlined />}>
+              <Link to="/dashboard/my-orders">My Orders</Link>
+            </Menu.Item>
           )}
         </Menu>
       </Sider>
       <Layout>
         <Header style={{ background: "#fff", padding: 0, textAlign: "center" }}>
-          <h2>Dashboard</h2>
+          <h2>{userName ? `Welcome, ${userName}` : "Dashboard"}</h2>
         </Header>
         <Content style={{ margin: "16px" }}>
-          <Outlet /> 
+          <Outlet />
         </Content>
       </Layout>
     </Layout>

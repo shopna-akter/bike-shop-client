@@ -15,7 +15,7 @@ const AppRoutes = () => {
     <BrowserRouter>
       <Routes>
         {/* Home page routes*/}
-        <Route path="/" element={<Home/>} />
+        <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
 
         {/* Authentication Routes */}
@@ -23,7 +23,7 @@ const AppRoutes = () => {
         <Route path="/register" element={<Register />} />
 
         {/* All Product Route */}
-        <Route path="/all-product" element={<AllProducts/>}/>
+        <Route path="/all-product" element={<AllProducts />} />
 
         {/* Protected Dashboard Routes */}
         <Route
@@ -35,8 +35,24 @@ const AppRoutes = () => {
           }
         >
           <Route index element={<DashboardPage />} />
-          <Route path="orders" element={<OrdersPage />} />
-          <Route path="products" element={<ProductsPage />} />
+
+          {/* Admin-Only Routes */}
+          <Route 
+            path="orders" 
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <OrdersPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="products" 
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <ProductsPage />
+              </ProtectedRoute>
+            } 
+          />
         </Route>
       </Routes>
     </BrowserRouter>

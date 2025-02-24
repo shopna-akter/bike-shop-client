@@ -7,6 +7,7 @@ interface User {
   _id: string;
   name: string;
   email: string;
+  role: string;
   token: string;
 }
 
@@ -17,13 +18,12 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: localStorage.getItem("token")
-    ? JSON.parse(localStorage.getItem("token") as string)
+  user: localStorage.getItem("user") 
+    ? JSON.parse(localStorage.getItem("user") as string) 
     : null,
   isLoading: false,
   error: null,
 };
-
 
 interface RegisterUserData {
   name: string;
@@ -49,19 +49,26 @@ export const register = createAsyncThunk<User, RegisterUserData>(
 );
 
 // Login user
-export const login = createAsyncThunk<User, LoginUserData>(
+export const login = createAsyncThunk<User & { accessToken: string; refreshToken: string }, LoginUserData>(
   "auth/login",
   async (userData, thunkAPI) => {
     try {
-      return await loginUser(userData);
+      const response = await loginUser(userData);
+      return {
+        ...response.user,
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      };
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Login failed");
     }
   }
 );
 
-export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
-  localStorage.removeItem("token"); 
+
+// Logout user
+export const logout = createAsyncThunk("auth/logout", async () => {
+  localStorage.removeItem("user"); // ✅ Clear stored user
   return null;
 });
 
@@ -77,6 +84,7 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action: PayloadAction<User>) => {
         state.isLoading = false;
         state.user = action.payload;
+        localStorage.setItem("user", JSON.stringify(action.payload)); // ✅ Store full user object
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
@@ -89,7 +97,7 @@ const authSlice = createSlice({
         console.log("User Logged In:", action.payload);
         state.isLoading = false;
         state.user = action.payload;
-        localStorage.setItem("token", JSON.stringify(action.payload));
+        localStorage.setItem("user", JSON.stringify(action.payload));
       })      
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
