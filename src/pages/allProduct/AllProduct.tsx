@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Card, Badge, Tooltip, Typography, Space, Flex, Tag, Divider, Button, Input, Select } from 'antd';
+import { Card, Badge, Tooltip, Typography, Space, Flex, Tag, Divider, Button, Input, Select, Slider } from 'antd';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 
@@ -19,6 +19,7 @@ const AllProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState<string>('');
   const [category, setCategory] = useState<string>('');
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]); // Default price range
 
   useEffect(() => {
     fetch('http://localhost:5000/api/products')
@@ -30,13 +31,15 @@ const AllProducts = () => {
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = !category || product.category === category;
-    return matchesSearch && matchesCategory;
+    const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+
+    return matchesSearch && matchesCategory && matchesPrice;
   });
 
   return (
     <div style={{ padding: 16 }}>
-      {/* Search and Category Filter */}
-      <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
+      {/* Filters Section */}
+      <div style={{ display: 'flex', gap: 16, marginBottom: 16, flexWrap: 'wrap' }}>
         <Input
           placeholder="Search by name"
           value={search}
@@ -54,6 +57,16 @@ const AllProducts = () => {
           <Select.Option value="Hybrid">Hybrid</Select.Option>
           <Select.Option value="Electric">Electric</Select.Option>
         </Select>
+        <div style={{ width: 200 }}>
+          <Text>Price Range:</Text>
+          <Slider
+            range
+            min={0}
+            max={10000}
+            defaultValue={[0, 10000]}
+            onChange={(value) => setPriceRange(value as [number, number])}
+          />
+        </div>
       </div>
 
       {/* Product List */}
