@@ -30,7 +30,7 @@ const initialState: ProductsState = {
 };
 
 // Fetch all products
-export const fetchProducts = createAsyncThunk<Product[], void, { rejectValue: string }>(
+export const fetchProducts = createAsyncThunk<FetchProductsResponse, void, { rejectValue: string }>(
   "products/fetchProducts",
   async (_, { rejectWithValue }) => {
     try {
@@ -44,6 +44,7 @@ export const fetchProducts = createAsyncThunk<Product[], void, { rejectValue: st
     }
   }
 );
+
 
 // Add a new product
 export const addProduct = createAsyncThunk<Product, Partial<Product>, { rejectValue: string }>(
@@ -68,7 +69,7 @@ export const updateProduct = createAsyncThunk<Product, Product, { rejectValue: s
   "products/updateProduct",
   async (updatedProduct, { rejectWithValue }) => {
     try {
-      
+
       const response = await fetch(`https://bike-shop-server-jade.vercel.app/api/products/${updatedProduct._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -99,6 +100,12 @@ export const deleteProduct = createAsyncThunk<string, string, { rejectValue: str
     }
   }
 );
+interface FetchProductsResponse {
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data: Product[];
+}
 
 const productsSlice = createSlice({
   name: "products",
@@ -111,10 +118,16 @@ const productsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<{ data: Product[] }>) => {
-        state.products = action.payload.data.filter((product) => !product.isDeleted);
+      .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<FetchProductsResponse>) => {
+        console.log("Fetched Products Payload:", action.payload);
+        if (Array.isArray(action.payload.data)) {
+          state.products = action.payload.data.filter((product) => !product.isDeleted);
+        } else {
+          console.error("Data is not an array:", action.payload.data);
+        }
+
         state.loading = false;
-      })      
+      })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Something went wrong";
