@@ -18,8 +18,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: localStorage.getItem("user") 
-    ? JSON.parse(localStorage.getItem("user") as string) 
+  user: localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user") as string)
     : null,
   isLoading: false,
   error: null,
@@ -75,7 +75,7 @@ export const logout = createAsyncThunk("auth/logout", async () => {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {}, 
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
@@ -84,7 +84,7 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action: PayloadAction<User>) => {
         state.isLoading = false;
         state.user = action.payload;
-        localStorage.setItem("user", JSON.stringify(action.payload)); // ✅ Store full user object
+        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
@@ -93,18 +93,23 @@ const authSlice = createSlice({
       .addCase(login.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(login.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(login.fulfilled, (state, action: PayloadAction<User & { accessToken: string; refreshToken: string }>) => {
         console.log("User Logged In:", action.payload);
         state.isLoading = false;
         state.user = action.payload;
+
         localStorage.setItem("user", JSON.stringify(action.payload));
-      })      
+        localStorage.setItem("accessToken", action.payload.accessToken);
+        localStorage.setItem("refreshToken", action.payload.refreshToken);
+      })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
       .addCase(logout.fulfilled, (state) => {
-        state.user = null; // ✅ Reset user state on logout
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        state.user = null;
       });
   },
 });

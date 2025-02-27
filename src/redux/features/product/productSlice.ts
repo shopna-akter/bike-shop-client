@@ -34,7 +34,7 @@ export const fetchProducts = createAsyncThunk<Product[], void, { rejectValue: st
   "products/fetchProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/api/products");
+      const response = await fetch("https://bike-shop-server-jade.vercel.app/api/products");
       if (!response.ok) throw new Error("Failed to fetch products");
       const data = await response.json();
       console.log("Fetched Products:", data);
@@ -50,7 +50,7 @@ export const addProduct = createAsyncThunk<Product, Partial<Product>, { rejectVa
   "products/addProduct",
   async (newProduct, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/api/products", {
+      const response = await fetch("https://bike-shop-server-jade.vercel.app/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newProduct),
@@ -69,7 +69,7 @@ export const updateProduct = createAsyncThunk<Product, Product, { rejectValue: s
   async (updatedProduct, { rejectWithValue }) => {
     try {
       
-      const response = await fetch(`http://localhost:5000/api/products/${updatedProduct._id}`, {
+      const response = await fetch(`https://bike-shop-server-jade.vercel.app/api/products/${updatedProduct._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedProduct),
@@ -89,7 +89,7 @@ export const deleteProduct = createAsyncThunk<string, string, { rejectValue: str
   "products/deleteProduct",
   async (productId, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
+      const response = await fetch(`https://bike-shop-server-jade.vercel.app/api/products/${productId}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Failed to delete product");

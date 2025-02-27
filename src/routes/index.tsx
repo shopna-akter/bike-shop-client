@@ -9,6 +9,8 @@ import ProtectedRoute from "../utils/ProtectedRoute";
 import Home from "../pages/home/Home";
 import AboutUs from "../pages/about/AboutUs";
 import AllProducts from "../pages/allProduct/AllProduct";
+import ProductDetails from "../pages/Product Detail/productDetail";
+import UserManagement from "../pages/dashboard/UserManagement";
 
 const AppRoutes = () => {
   return (
@@ -25,6 +27,8 @@ const AppRoutes = () => {
         {/* All Product Route */}
         <Route path="/all-product" element={<AllProducts />} />
 
+        {/* Product Details Route*/}
+        <Route path="/products/:id" element={<ProductDetails/>}/>
         {/* Protected Dashboard Routes */}
         <Route
           path="/dashboard"
@@ -50,6 +54,14 @@ const AppRoutes = () => {
             element={
               <ProtectedRoute adminOnly={true}>
                 <ProductsPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="users" 
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <UserManagement />
               </ProtectedRoute>
             } 
           />

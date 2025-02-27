@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://bike-shop-server-lac.vercel.app/"; 
+const API_BASE_URL = "https://bike-shop-server-jade.vercel.app/"; 
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

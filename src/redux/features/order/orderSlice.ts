@@ -15,7 +15,7 @@ const initialState: OrderState = {
 };
 
 export const fetchOrders = createAsyncThunk('order/fetchOrders', async () => {
-  const response = await axios.get('https://bike-shop-server-lac.vercel.app/api/orders');
+  const response = await axios.get('https://bike-shop-server-jade.vercel.app/api/orders');
   return response.data;
 });
 

@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react';
 const { Title, Text } = Typography;
 
 interface Product {
-  id: string;
+  _id: string;
   name: string;
   image: string;
   category: string;
@@ -22,7 +22,7 @@ const AllProducts = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]); // Default price range
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/products')
+    fetch('https://bike-shop-server-jade.vercel.app/api/products')
       .then((res) => res.json())
       .then((data) => setProducts(data.data))
       .catch((err) => console.error('Error fetching products:', err));
@@ -71,12 +71,12 @@ const AllProducts = () => {
 
       {/* Product List */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-        {filteredProducts.map(({ id, name, image, category, bikeModel, price, quantity }) => (
+        {filteredProducts.map(({ _id, name, image, category, bikeModel, price, quantity }) => (
           <Card
-            key={id}
+            key={_id}
             cover={
               <Badge.Ribbon color={quantity ? 'default' : 'red'} text={quantity ? 'Available' : 'Out of Stock'}>
-                <Link to={`/products/${id}`}>
+                <Link to={`/products/${_id}`}>
                   <figure style={{ overflow: 'hidden', borderRadius: '8px 8px 0 0', height: 280 }}>
                     <img
                       alt={name}
@@ -91,7 +91,7 @@ const AllProducts = () => {
           >
             <Tooltip title={name}>
               <Title level={5}>
-                <Link to={`/products/${id}`}>{name}</Link>
+                <Link to={`/products/${_id}`}>{name}</Link>
               </Title>
             </Tooltip>
             <Space direction="vertical">
