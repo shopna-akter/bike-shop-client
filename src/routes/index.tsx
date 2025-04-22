@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardPage from "../pages/dashboard/Dashboard";
 import OrdersPage from "../pages/dashboard/Order";
@@ -11,12 +11,12 @@ import AboutUs from "../pages/about/AboutUs";
 import AllProducts from "../pages/allProduct/AllProduct";
 import ProductDetails from "../pages/Product Detail/productDetail";
 import UserManagement from "../pages/dashboard/UserManagement";
+import CheckoutPage from "../pages/checkout/CheckoutPage";
 
 const AppRoutes = () => {
   return (
-    <BrowserRouter>
       <Routes>
-        {/* Home page routes*/}
+        {/* Home page route*/}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
 
@@ -27,6 +27,8 @@ const AppRoutes = () => {
         {/* All Product Route */}
         <Route path="/all-product" element={<AllProducts />} />
 
+        {/* Product order Route*/}
+        <Route path="/checkout/:id" element={<CheckoutPage />} />
         {/* Product Details Route*/}
         <Route path="/products/:id" element={<ProductDetails/>}/>
         {/* Protected Dashboard Routes */}
@@ -67,7 +69,6 @@ const AppRoutes = () => {
           />
         </Route>
       </Routes>
-    </BrowserRouter>
   );
 };
 

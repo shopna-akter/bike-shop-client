@@ -1,4 +1,7 @@
+import { Card, Typography, Avatar, Row, Col } from "antd";
 import { motion } from "framer-motion";
+
+const { Title, Text } = Typography;
 
 const testimonials = [
   {
@@ -23,35 +26,27 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section className="bg-gray-100 py-16 px-4">
-      <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8">
-          What Our Customers Say
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
+    <section style={{ background: "#f5f5f5", padding: "50px 20px" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
+        <Title level={2} style={{ marginBottom: "30px" }}>What Our Customers Say</Title>
+        <Row gutter={[24, 24]} justify="center">
           {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              viewport={{ once: true }}
-              className="bg-white shadow-lg rounded-2xl p-6 text-center"
-            >
-              <img
-                src={testimonial.image}
-                alt={testimonial.name}
-                className="w-16 h-16 mx-auto rounded-full mb-4 border-2 border-blue-500"
-              />
-              <p className="text-gray-600 italic mb-4">
-                "{testimonial.review}"
-              </p>
-              <h3 className="text-lg font-semibold text-gray-800">
-                - {testimonial.name}
-              </h3>
-            </motion.div>
+            <Col xs={24} sm={12} md={8} key={index}>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                viewport={{ once: true }}
+              >
+                <Card style={{ textAlign: "center", borderRadius: "10px" }}>
+                  <Avatar src={testimonial.image} size={64} style={{ marginBottom: "15px" }} />
+                  <Text italic>"{testimonial.review}"</Text>
+                  <Title level={4} style={{ marginTop: "10px" }}>- {testimonial.name}</Title>
+                </Card>
+              </motion.div>
+            </Col>
           ))}
-        </div>
+        </Row>
       </div>
     </section>
   );

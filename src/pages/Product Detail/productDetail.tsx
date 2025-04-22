@@ -6,7 +6,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 const { Title, Text } = Typography;
 
 const ProductDetails = () => {
-  const { id } = useParams(); // Get product ID from URL
+  const { id } = useParams();
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [product, setProduct] = useState<any>(null);

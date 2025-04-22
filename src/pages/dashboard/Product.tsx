@@ -60,6 +60,7 @@ const ProductsPage = () => {
         message.success("Product added successfully");
       }
       setIsModalOpen(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       message.error("Failed to submit form");
     }

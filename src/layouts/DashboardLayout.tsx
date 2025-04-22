@@ -22,7 +22,7 @@ const DashboardLayout = () => {
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible>
         <div className="logo" style={{ color: "white", textAlign: "center", padding: "16px" }}>
-          Bike Shop
+          <Link to="/" style={{color: "white",}}>Bike Shop</Link>
         </div>
         <Menu theme="dark" mode="inline">
           <Menu.Item key="1" icon={<DashboardOutlined />}>
